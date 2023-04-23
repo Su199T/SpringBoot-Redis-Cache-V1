@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+<!--    来自-->
+<!--    SLF4J+LogBack实现不同级别的日志输出到不同文件-->
+<!--    https://blog.csdn.net/weixin_41884010/article/details/98053646-->
+<!--    做了部分添加等修改-->
+
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+
+    <!-- 日志编码 -->
+
+<!--    Linux下使用utf-8-->
+<!--    IDEA 控制台 运行使用 uft-8-->
+    <property name="CHARSET" value="utf-8"></property>
+
+<!--    Windows下默认编码是gbk-->
+<!--    Windows部署使用 gbk-->
+<!--    <property name="CHARSET" value="gbk"></property>-->
+
+    <!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
+    <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- 日志记录格式 -->
+    <property name="ERROR_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L-%msg%n" />
+    <!-- 日志记录格式 -->
+    <property name="INFO_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L-%msg%n" />
+
+    <!-- 定义日志存储的路径，不要配置相对路径 -->
+    <property name="FILE_PATH" value="C:/SpringBootApp/log/spring-log.%d{yyyy-MM-dd}.%i.log"/>
+
+    <property name="logFileSize" value="3MB"></property>
+
+    <property name="logKeepDay" value="7"></property>
+
+    <!-- 控制台输出日志 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+<!--      控制台输出日志  不能保存到文件-->
+
+        <!-- 日志文件的格式 -->
+        <encoder>
+            <!-- 按照上面配置的LOG_PATTERN来打印日志 -->
+            <!--        默认  ${LOG_PATTERN}  -->
+            <!--        控制台 打印彩色日志    ${CONSOLE_LOG_PATTERN}  -->
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+<!--            特别注意 IDEA 控制台设置编码为  UTF-8 但是 windows 系统控制台默认编码为GBK-->
+            <!-- 控制台也要使用UTF-8，不要使用GBK，否则会中文乱码 -->
+            <charset>${CHARSET}</charset>
+        </encoder>
+        <!-- 日志级别过滤INFO以下 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
+    </appender>
+
+    <!-- 日志记录器，日期滚动记录 -->
+    <appender name="FILE_ERROR"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+<!--        屏蔽条下面这条会使用 fileNamePattern-->
+<!--        <file>D:/SpringBootApp/log/log_error.log</file>-->
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+<!--            日志路径及文件名-->
+            <fileNamePattern>C:/SpringBootApp/GameLog/errorLog_%d{yyyy-MM-dd}_%i.log
+            </fileNamePattern>
+            <maxFileSize>${logFileSize}</maxFileSize>
+            <maxHistory>${logKeepDay}</maxHistory>
+        </rollingPolicy>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+        <!-- 日志文件的格式 -->
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+        <!-- 此日志文件只记录error级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 日志记录器，日期滚动记录 -->
+    <appender name="FILE_WARN"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <!--        屏蔽条下面这条会使用 fileNamePattern-->
+        <!--        <file>D:/SpringBootApp/log/log_error.log</file>-->
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--            日志路径及文件名-->
+            <fileNamePattern>C:/SpringBootApp/GameLog/warnLog_%d{yyyy-MM-dd}_%i.log
+            </fileNamePattern>
+            <maxFileSize>${logFileSize}</maxFileSize>
+            <maxHistory>${logKeepDay}</maxHistory>
+        </rollingPolicy>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+        <!-- 日志文件的格式 -->
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+        <!-- 此日志文件只记录warn级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>warn</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 日志记录器，日期滚动记录 -->
+    <appender name="FILE_INFO"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <!--        屏蔽条下面这条会使用 fileNamePattern-->
+<!--        <file>D:/SpringBootApp/log/log_info.log</file>-->
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--            日志路径及文件名-->
+            <fileNamePattern>C:/SpringBootApp/GameLog/infoLog_%d{yyyy-MM-dd}_%i.log
+            </fileNamePattern>
+            <maxFileSize>${logFileSize}</maxFileSize>
+            <maxHistory>${logKeepDay}</maxHistory>
+        </rollingPolicy>
+        <!-- 追加方式记录日志 -->
+        <append>true</append>
+        <!-- 日志文件的格式 -->
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+        <!-- 此日志文件只记录info级别的 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+<!--   使用 这些日志,不管是记录到文件还是打印 -->
+    <root level="INFO">
+        <appender-ref ref="FILE_ERROR" />
+        <appender-ref ref="FILE_WARN" />
+        <appender-ref ref="FILE_INFO" />
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>

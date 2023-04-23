@@ -1,0 +1,134 @@
+spring:
+    #数据源
+  # mysql 配置 不需要屏蔽配置
+    datasource:
+        name: druidDataSource
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+            #jdbc最新驱动 ,注意有  .cj.
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            #mysql url
+            url: jdbc:mysql://localhost:3306/qdadmin_db?serverTimezone=Asia/Shanghai&useSSL=false
+            username: root
+            password: root
+            filters: stat,wall,log4j,config
+            max-active: 100
+            initial-size: 1
+            max-wait: 60000
+            min-idle: 1
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            validation-query: select 'x'
+            test-while-idle: true
+            test-on-borrow: false
+            test-on-return: false
+            pool-prepared-statements: true
+            max-open-prepared-statements: 50
+            max-pool-prepared-statement-per-connection-size: 20
+
+    ## mongoDB
+    ## https://www.jianshu.com/p/237a0c5ad9fa
+    ## https://blog.csdn.net/u012373281/article/details/93747350
+    ##
+    ## 没有密码和姓名就不要设置值
+#    data:
+#        mongodb:
+#            uri: mongodb://game_user_admin66986:game_user_admin_66986dev@localhost:27017/parkourGame
+
+    ## https://www.cnblogs.com/lzhdonald/p/11560002.html
+    ##redis配置
+    ##注意使用 6395 端口号
+    ## 版本 3.2.100
+    ## port 在 redis.windows.conf 第79行
+    ## pwd 在 redis.windows.conf 第444行左右
+    ## redis的数据清空 启动redis-cli.exe 不需要输入密码 输入flushall 回车
+    ##
+#    redis:
+#        database: 0
+#        host: 127.0.0.1
+#        port: 6395
+#        # 国外服
+#        password: 56Dgf67jkasy59
+#        ## 使用 lettuce 连接池
+#        lettuce:
+#          pool:
+#            max-active: 500
+#            max-wait: 500
+#            max-idle: 500
+#            min-idle: 0
+#          timeout: 500
+            ## 使用 jedis 连接池
+            ##  max-active 连接池最大连接数
+            ##  max-wait 连接池最大阻塞时间
+            ##  timeout 连接池超时时间
+#        jedis:
+#            pool:
+#                max-active: 100
+#                max-idle: 3
+#                max-wait: -1
+#                min-idle: 0
+#        timeout: 1000
+
+
+# mybatis配置
+# SpringBoot 整合 Mybatis + Mysql——XML配置方式
+# https://www.cnblogs.com/gavincoder/p/10105762.html  (推荐)
+# https://www.cnblogs.com/shamo89/p/9960370.html   (推荐)
+# mapper 文件位置 resources/mapper/ 下
+# 如果配置扫描实体类,且字段没有加上注解  则会  出现 Cause: java.sql.SQLSyntaxErrorException: Unknown column 'id' in 'field list'
+mybatis:
+    ## typeAliasesPackage: com.mydbex.pojo  ##
+    mapperLocations: classpath:mapper/*.xml
+    #configLocation: classpath:/mybatis-config.xml #复杂的需要配置
+
+    ##  生产环境 开启ssl 配置
+server:
+    ## ssl 配置
+    ## 上线前本地测试屏蔽SSL 配置 以及 com.** .config.HttpsConfig 类两个注解
+    ## key-store  为ssl证书文件
+    ## key-store-password 为ssl证书密码
+    ssl:
+        key-store: classpath:tomcatqd.jks
+        key-store-password: 1rbtxb4dd4blpl
+        key-store-type: JKS
+
+
+
+## 日志配置文件
+## 日志成功配置 logback-spring.xml  必须是这个文件名 不需要在配置文件声明
+## 来源
+
+
+##
+#logging:
+#    config: classpath:logback-boot.xml
+
+#Swagger lock
+#swagger:
+#    enable: true  # 无效？
+
+##多数据源的配置
+#dynamic:
+#  datasource:
+#    slave1:
+#      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#      url: jdbc:sqlserver://localhost:1433;DatabaseName=renren_security
+#      username: sa
+#      password: 123456
+#    slave2:
+#      driver-class-name: org.postgresql.Driver
+#      url: jdbc:postgresql://localhost:5432/renren_security
+#      username: renren
+#      password: 123456
+
+
+##------------------自定义的配置------------------
+##给Bean的@Value注解使用的配置
+
+## 定时任务线程池 配置
+## com.javabootpro.common.config.task.ScheduleConfig
+task:
+    scheduling:
+        ## 定时任务线程池大小
+        corePoolSize: 10
+

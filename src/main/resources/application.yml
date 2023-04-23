@@ -1,0 +1,112 @@
+server:
+  ## 服务端部署和本地测试端口一样
+  ## 只不过服务端是https请求、本地是http请求
+  port: 8881
+  custom:
+    # http 监听端口
+    httpPort: 8797
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 800
+
+## ssl 配置
+## 上线前本地测试屏蔽SSL 配置 以及 com.** .config.HttpsConfig 类两个注解
+  ## key-store  为ssl证书文件
+  ## key-store-password 为ssl证书密码
+#  ssl:
+#    key-store: classpath:tomcatqd.jks
+#    key-store-password: 1rbtxb4dd4blpl
+#    key-store-type: JKS
+spring:
+  application:
+    name: qd-springboot-template
+## 不显示网页应用图标
+#关闭favicon
+  mvc:
+    favicon:
+      enabled : false
+##--------------------------charset--------------------------
+#设置响应为utf-8
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+### ThymeLeaf配置
+  thymeleaf:
+    #模板的模式，支持 HTML, XML TEXT JAVASCRIPT
+    mode: HTML5
+    #编码 可不用配置
+    encoding: UTF-8
+    #内容类别,可不用配置
+    #content-type: text/html
+    #开发配置为false,避免修改模板还要重启服务器
+    cache: false
+    #配置模板路径，默认是templates，可以不用配置
+    prefix: classpath:/templates
+## jackson
+  jackson:
+    time-zone: GMT+8
+    #日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+#    serialization:
+#      #格式化输出
+#      indent_output: CLOSE_CLOSEABLE #true
+#      #忽略无法转换的对象
+##      fail_on_empty_beans: false
+#      #设置空如何序列化
+#      defaultPropertyInclusion: off
+#      deserialization:
+#        #允许对象忽略json中不存在的属性
+#        fail_on_unknown_properties: false
+#      parser:
+#        #允许出现特殊字符和转义符
+#        allow_unquoted_control_chars: true
+#        #允许出现单引号
+#        allow_single_quotes: true
+
+## 文件上传
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+# 环境 dev|test|prod
+  profiles:
+    active: dev # prod   # dev
+### Spring Cloud
+### Spring boot admin 监控
+  #热部署
+  devtools:
+    restart:
+      enabled: true
+
+
+##数据源  在dev配置
+
+ ##开放健康检查接口
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  endpoint:
+#    health:
+#      show-details: ALWAYS
+
+
+##分页
+#pagehelper:
+#  helperDialect: mysql
+#  reasonable: true
+#  supportMethodsArguments: true
+#  params: count=countSql
+
+
+
+
+
+
+
+
+
